@@ -133,6 +133,10 @@ body {
 }
 
 @media (width <= 440px) {
+  .cards {
+    margin: 0 25px;
+  }
+
   .cards img {
     height: 45vw;
     width: 45vw;
@@ -140,3 +144,10 @@ body {
     margin: -140px 0 30px 0;
   }
 }
+
+@media (width <= 400px) {
+  .cards {
+    margin: 0 15px;
+  }
+}
+
