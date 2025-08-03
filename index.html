@@ -21,7 +21,7 @@
         <h2>Simulador de Movimiento <span>2D</span></h2>
         <!-- <h3>2D</h3> -->
 
-        <div class="controls needs-validation" novalidate>
+        <form class="controls needs-validation" novalidate onsubmit="return iniciarSimulacion(event)">
  
           <div class="row">
 <!--             <div class="col">
@@ -60,9 +60,9 @@
             </div>
           </div>
           
-          <button onclick="actualizarVelocidad()">Reflejar</button>
+          <button>Reflejar</button>
 
-        </div>
+        </form>
       </div>
     </div>
 
@@ -93,6 +93,32 @@
 
       let posicion = { x: 100, y: 100 };
       let velocidad = { x: 2, y: 1 };
+
+      function iniciarSimulacion(event) {
+        event.preventDefault(); 
+
+        const form = event.target;
+
+        if (!form.checkValidity()) {
+          event.stopPropagation();
+          form.classList.add('was-validated');
+          return false; // No continuar si no es válido
+        }
+
+        // Si los datos son válidos, actualizar velocidad y comenzar animación
+        actualizarVelocidad();
+
+        // Opcional: deshabilitar el botón para evitar reiniciar varias veces
+        form.querySelector('button[type="submit"]').disabled = true;
+
+        // Inicia la animación solo si no se ha iniciado antes
+        if (!window.animacionIniciada) {
+          window.animacionIniciada = true;
+          animar();
+        }
+
+        return false;
+      }
 
       function actualizarVelocidad() {
         velocidad.x = parseFloat(document.getElementById('vx').value);
