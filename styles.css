@@ -13,6 +13,12 @@ body {
   font-family: "Euclid Circular A", "Poppins";
 }
 
+/* En tu archivo styles.css */
+.d-md-flex button {
+  flex: 1;
+  min-width: 120px;
+}
+
 .cards {
   display: flex;
   align-items: center;
@@ -98,6 +104,11 @@ body {
   outline: none !important;
   border-color: #dee2e6 !important;
   box-shadow: 0 0 0 .25rem rgb(255 255 255 / 25%) !important;
+}
+
+.form-control:disabled {
+    background-color: #212529;
+    opacity: 1;
 }
 
 
