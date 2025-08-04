@@ -16,155 +16,52 @@
   </head>
   <body>
     <div class="cards">
-      <canvas id="canvas" width="380" height="280"></canvas>
+      <canvas id="canvas"></canvas>
       <div>
         <h2>Simulador de Movimiento <span>2D</span></h2>
-        <!-- <h3>2D</h3> -->
 
         <form class="controls needs-validation" novalidate onsubmit="return iniciarSimulacion(event)">
- 
           <div class="row">
-<!--             <div class="col">
-
-              <p>
-                Posición
-              </p>
-
-              <div class="input-group mb-3">
-                <span class="input-group-text">X</span>
-                  <input type="text" id="px" name="p-x" class="form-control altura-personalizada" id="floatingInputGroup1" placeholder="Valor X" required>
-              </div>
-
-              <div class="input-group mb-3">
-                <span class="input-group-text">Y</span>
-                  <input type="text" id="py" name="p-y" class="form-control altura-personalizada" id="floatingInputGroup2" placeholder="Valor Y" required>
-              </div>
-
-            </div> -->
             <div class="col">
-
-              <p>
-                Velocidad
-              </p>
-
+              <p>Posición</p>
               <div class="input-group mb-3">
                 <span class="input-group-text">X</span>
-                  <input type="text" id="vx" name="v-x" class="form-control altura-personalizada" id="floatingInputGroup3" placeholder="Valor Y" required>
+                <input type="text" id="px" name="p-x" class="form-control altura-personalizada" value="100" placeholder="Valor X" required>
               </div>
-
               <div class="input-group mb-3">
                 <span class="input-group-text">Y</span>
-                  <input type="text" id="vy" name="v-y" class="form-control altura-personalizada" id="floatingInputGroup4" placeholder="Valor Y" required>
+                <input type="text" id="py" name="p-y" class="form-control altura-personalizada" value="100" placeholder="Valor Y" required>
               </div>
-
+            </div>
+            <div class="col">
+              <p>Velocidad</p>
+              <div class="input-group mb-3">
+                <span class="input-group-text">X</span>
+                <input type="text" id="vx" name="v-x" class="form-control altura-personalizada" placeholder="Valor X" required>
+              </div>
+              <div class="input-group mb-3">
+                <span class="input-group-text">Y</span>
+                <input type="text" id="vy" name="v-y" class="form-control altura-personalizada" placeholder="Valor Y" required>
+              </div>
             </div>
           </div>
           
-          <button>Reflejar</button>
-
+          <div class="d-grid gap-2 d-md-flex">
+            <button type="submit" class="btn btn-primary">Reflejar</button>
+            <button type="button" id="stopButton" class="btn btn-danger">Detener</button>
+          </div>
         </form>
       </div>
     </div>
 
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-     <script>
-      (() => {
-        'use strict'
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+       (()=>{"use strict";let e=document.querySelectorAll(".needs-validation");Array.from(e).forEach(e=>{e.addEventListener("submit",t=>{e.checkValidity()||(t.preventDefault(),t.stopPropagation()),e.classList.add("was-validated")},!1)})})();
+    </script>
 
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        const forms = document.querySelectorAll('.needs-validation')
-
-        // Loop over them and prevent submission
-        Array.from(forms).forEach(form => {
-          form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-              event.preventDefault()
-              event.stopPropagation()
-            }
-
-            form.classList.add('was-validated')
-          }, false)
-        })
-      })()
-     </script>
-     <script>
-      const canvas = document.getElementById('canvas');
-      const ctx = canvas.getContext('2d');
-
-      let posicion = { x: 100, y: 100 };
-      let velocidad = { x: 0, y: 0 };
-
-      function iniciarSimulacion(event) {
-        event.preventDefault(); 
-
-        const form = event.target;
-
-        if (!form.checkValidity()) {
-          event.stopPropagation();
-          form.classList.add('was-validated');
-          return false; // No continuar si no es válido
-        }
-
-        // Si los datos son válidos, actualizar velocidad y comenzar animación
-        actualizarVelocidad();
-
-        // Opcional: deshabilitar el botón para evitar reiniciar varias veces
-        form.querySelector('button[type="submit"]').disabled = true;
-
-        // Inicia la animación solo si no se ha iniciado antes
-        if (!window.animacionIniciada) {
-          window.animacionIniciada = true;
-          animar();
-        }
-
-        return false;
-      }
-
-      function actualizarVelocidad() {
-        velocidad.x = parseFloat(document.getElementById('vx').value);
-        velocidad.y = parseFloat(document.getElementById('vy').value);
-      }
-
-      function animar() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Dibujar objeto
-        ctx.beginPath();
-        ctx.arc(posicion.x, posicion.y, 20, 0, Math.PI * 2);
-        ctx.fillStyle = "#007bff";
-        ctx.fill();
-
-        // Actualizar posición
-        posicion.x += velocidad.x;
-        posicion.y += velocidad.y;
-
-        // Rebote en bordes
-        if (posicion.x < 20 || posicion.x > canvas.width - 20) velocidad.x *= -1;
-        if (posicion.y < 20 || posicion.y > canvas.height - 20) velocidad.y *= -1;
-
-        requestAnimationFrame(animar);
-      }
-
-      animar();
-
-      function ajustarCanvas() {
-          if (window.innerWidth <= 600) {
-            canvas.height = 200;
-            canvas.width = 280; 
-          } else if (window.innerWidth <= 440) {
-            canvas.height = 198; 
-          } else if (window.innerWidth >= 600) {
-            canvas.width = 280; 
-            canvas.height = 280;
-          } else {
-            canvas.height = 280;   
-          }
-        }
-
-        // Llamar al cargar
-        ajustarCanvas();
-
-        window.addEventListener("resize", ajustarCanvas);
-     </script>
+    <script>
+       const canvas=document.getElementById("canvas"),ctx=canvas.getContext("2d"),stopButton=document.getElementById("stopButton"),pxInput=document.getElementById("px"),pyInput=document.getElementById("py"),vxInput=document.getElementById("vx"),vyInput=document.getElementById("vy"),formInputs=[pxInput,pyInput,vxInput,vyInput];let posicion={x:100,y:100},velocidad={x:0,y:0},animationId=null,animacionActiva=!1;function toggleInputs(n){formInputs.forEach(i=>{i.disabled=n})}function dibujarPelota(){ctx.clearRect(0,0,canvas.width,canvas.height),ctx.beginPath(),ctx.arc(posicion.x,posicion.y,20,0,2*Math.PI),ctx.fillStyle="#007bff",ctx.fill()}function actualizarPosicionDesdeInputs(){let n=parseFloat(pxInput.value),i=parseFloat(pyInput.value);isNaN(n)||(posicion.x=n),isNaN(i)||(posicion.y=i),dibujarPelota()}function animar(){posicion.x+=velocidad.x,posicion.y+=velocidad.y,(posicion.x<20||posicion.x>canvas.width-20)&&(velocidad.x*=-1),(posicion.y<20||posicion.y>canvas.height-20)&&(velocidad.y*=-1),pxInput.value=Math.round(posicion.x),pyInput.value=Math.round(posicion.y),dibujarPelota(),animacionActiva&&(animationId=requestAnimationFrame(animar))}function iniciarSimulacion(n){return(n.preventDefault(),n.target.checkValidity())?(actualizarPosicionDesdeInputs(),velocidad.x=parseFloat(vxInput.value)||0,velocidad.y=parseFloat(vyInput.value)||0,animacionActiva||(animacionActiva=!0,toggleInputs(!0),animar()),!1):(n.stopPropagation(),n.target.classList.add("was-validated"),!1)}function detenerAnimacion(){animacionActiva=!1,animationId&&(cancelAnimationFrame(animationId),animationId=null),toggleInputs(!1),dibujarPelota()}function inicializar(){function n(){window.innerWidth<=600?(canvas.height=200,canvas.width=280):window.innerWidth<=440?canvas.height=198:(window.innerWidth>=600&&(canvas.width=280),canvas.height=280),dibujarPelota()}pxInput.value=posicion.x,pyInput.value=posicion.y,vxInput.value="",vyInput.value="",n(),window.addEventListener("resize",n),dibujarPelota()}pxInput.addEventListener("input",function(){if(!animacionActiva){let n=parseFloat(this.value);isNaN(n)||(posicion.x=n,dibujarPelota())}}),pyInput.addEventListener("input",function(){if(!animacionActiva){let n=parseFloat(this.value);isNaN(n)||(posicion.y=n,dibujarPelota())}}),pxInput.addEventListener("change",function(){animacionActiva||actualizarPosicionDesdeInputs()}),pyInput.addEventListener("change",function(){animacionActiva||actualizarPosicionDesdeInputs()}),stopButton.addEventListener("click",detenerAnimacion),inicializar();
+    </script>
   </body>
 </html>
